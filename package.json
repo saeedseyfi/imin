@@ -21,5 +21,9 @@
   "bugs": {
     "url": "https://github.com/saeedseyfi/imin/issues"
   },
-  "homepage": "https://github.com/saeedseyfi/imin#readme"
+  "homepage": "https://github.com/saeedseyfi/imin#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "git+https://github.com/yagop/node-telegram-bot-api.git#master",
+    "extend": "latest"
+  }
 }
