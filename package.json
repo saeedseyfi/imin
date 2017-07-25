@@ -1,0 +1,25 @@
+{
+  "name": "im-in",
+  "version": "0.0.1",
+  "description": "A simple event base telegram bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo 'no test yet...'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saeedseyfi/imin.git"
+  },
+  "keywords": [
+    "event",
+    "telegram bot",
+    "I'm in"
+  ],
+  "author": "Saeed Seyfi <me@saeedseyfi.com> (http://saeedseyfi.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saeedseyfi/imin/issues"
+  },
+  "homepage": "https://github.com/saeedseyfi/imin#readme"
+}
