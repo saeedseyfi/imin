@@ -11,29 +11,34 @@ const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
 
 let db;
 let eventCol;
+let inlineKeyboardMarkup;
 
-const inlineKeyboardMarkup = [
-    [
-        {
-            text: _('imin'),
-            callback_data: new CallbackData().restore('imin').id
-        },
-        {
-            text: _('imout'),
-            callback_data: new CallbackData().restore('imout').id
-        }
-    ]//,
-    // [
-    //     {
-    //         text: _('remove'),
-    //         callback_data: new CallbackData().restore('remove').id
-    //     },
-    //     {
-    //         text: _('تماس با پشتیبانی'),
-    //         url: 'http://t.me/SSeyfi'
-    //     }
-    // ]
-];
+const init = () => {
+    db = dbUtil.getDb();
+    eventCol = db.collection(db.TABLE.EVENT);
+    inlineKeyboardMarkup = [
+        [
+            {
+                text: _('imin'),
+                callback_data: new CallbackData().restore('imin').id
+            },
+            {
+                text: _('imout'),
+                callback_data: new CallbackData().restore('imout').id
+            }
+        ]//,
+        // [
+        //     {
+        //         text: _('remove'),
+        //         callback_data: new CallbackData().restore('remove').id
+        //     },
+        //     {
+        //         text: _('تماس با پشتیبانی'),
+        //         url: 'http://t.me/SSeyfi'
+        //     }
+        // ]
+    ];
+};
 
 bot.onText(new RegExp(`^\/${config.commands.start}(@${config.bot.username}bot)?(\s+)?$`), (msg) => {
     bot.sendMessage(msg.chat.id, `${_('desc')}\n\n${_('howToUse')}`);
@@ -208,8 +213,7 @@ bot.on('callback_query', (q) => {
 });
 
 dbUtil.connect(() => {
-    db = dbUtil.getDb();
-    eventCol = db.collection(db.TABLE.EVENT);
+    init();
 
     eventCol.find({}).toArray(function(err, docs) {
         if (err) {
