@@ -6,9 +6,6 @@ const config = require('./config');
 const Event = require('./models/Event');
 const CallbackData = require('./models/CallbackData');
 
-/* TODO: remove log stuff */
-console.log(process.env.BOT_TOKEN);
-
 const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
 const eventTable = db.table('event');
 
