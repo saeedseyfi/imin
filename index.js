@@ -256,7 +256,7 @@ dbUtil.connect(() => {
     }).listen(process.env.PORT || 5000);
 
     setInterval(() => {
-        request(`//localhost:${process.env.PORT || 5000}`, function () {
+        request(`https://iminbot.herokuapp.com:${process.env.PORT || 5000}/`, function () {
 
             /* TODO: remove log stuff */
             console.log(arguments);
