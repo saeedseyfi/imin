@@ -35,6 +35,11 @@ const inlineKeyboardMarkup = [
 
 bot.onText(new RegExp(`^\/${config.commands.start}(@${config.bot.username}bot)?(\s+)?$`), (msg) => {
     bot.sendMessage(msg.chat.id, `${_('desc')}\n\n${_('howToUse')}`);
+
+
+    /* TODO: remove log stuff */
+    console.log(eventTable.select());
+    
 });
 
 bot.onText(new RegExp(`^\/${config.commands.add}(@${config.bot.username}bot)?(\s+)?$`), (msg) => {
