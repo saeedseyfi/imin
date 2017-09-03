@@ -1,5 +1,6 @@
 const http = require('http');
 const TelegramBot = require('node-telegram-bot-api');
+const request = require('request');
 const dbUtil = require("./lib/dbUtil");
 const _ = require('./lib/lang');
 const config = require('./config');
@@ -46,28 +47,28 @@ const init = () => {
             console.dir(3, result);
         });
 
-    // inlineKeyboardMarkup = [
-    //     [
-    //         {
-    //             text: _('imin'),
-    //             callback_data: new CallbackData().restore('imin').id
-    //         },
-    //         {
-    //             text: _('imout'),
-    //             callback_data: new CallbackData().restore('imout').id
-    //         }
-    //     ]//,
-    //     // [
-    //     //     {
-    //     //         text: _('remove'),
-    //     //         callback_data: new CallbackData().restore('remove').id
-    //     //     },
-    //     //     {
-    //     //         text: _('تماس با پشتیبانی'),
-    //     //         url: 'http://t.me/SSeyfi'
-    //     //     }
-    //     // ]
-    // ];
+    inlineKeyboardMarkup = [
+        [
+            {
+                text: _('imin'),
+                callback_data: new CallbackData().restore('imin').id
+            },
+            {
+                text: _('imout'),
+                callback_data: new CallbackData().restore('imout').id
+            }
+        ]//,
+        // [
+        //     {
+        //         text: _('remove'),
+        //         callback_data: new CallbackData().restore('remove').id
+        //     },
+        //     {
+        //         text: _('تماس با پشتیبانی'),
+        //         url: 'http://t.me/SSeyfi'
+        //     }
+        // ]
+    ];
 };
 
 bot.onText(new RegExp(`^\/${config.commands.start}(@${config.bot.username}bot)?(\s+)?$`), (msg) => {
@@ -245,17 +246,17 @@ bot.on('callback_query', (q) => {
 dbUtil.connect(() => {
     init();
 
-    callbackDataCol.find({}).toArray(function (err, docs) {
-        if (err) {
-            throw err;
-        } else {
-            /* TODO: remove log stuff */
-            console.log(docs);
-        }
-    });
-
     http.createServer((req, res) => {
         res.writeHead(200, {'Content-Type': 'text/plain'});
         res.end();
     }).listen(process.env.PORT || 5000);
+
+    setInterval(() => {
+        request(`//localhost:${process.env.PORT || 5000}`, function () {
+
+            /* TODO: remove log stuff */
+            console.log(arguments);
+
+        })
+    }, 10000)
 });
