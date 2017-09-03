@@ -12,32 +12,62 @@ const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
 let db;
 let eventCol;
 let inlineKeyboardMarkup;
+let callbackDataCol;
 
 const init = () => {
     db = dbUtil.getDb();
-    eventCol = db.collection(db.TABLE.EVENT);
-    inlineKeyboardMarkup = [
-        [
-            {
-                text: _('imin'),
-                callback_data: new CallbackData().restore('imin').id
-            },
-            {
-                text: _('imout'),
-                callback_data: new CallbackData().restore('imout').id
-            }
-        ]//,
-        // [
-        //     {
-        //         text: _('remove'),
-        //         callback_data: new CallbackData().restore('remove').id
-        //     },
-        //     {
-        //         text: _('تماس با پشتیبانی'),
-        //         url: 'http://t.me/SSeyfi'
-        //     }
-        // ]
-    ];
+    eventCol = db.collection(db.COL.EVENT);
+    callbackDataCol = db.collection(db.COL.CALLBACK_DATA);
+
+    callbackDataCol.updateOne(
+        {"id": "imin"},
+        {"id": "imin", "data": {"do": "imin"}},
+        {upsert: true},
+        function (err, result) {
+            if (err) throw err;
+            console.dir(1, result);
+        });
+
+    callbackDataCol.updateOne(
+        {"id": "imout"},
+        {"id": "imout", "data": {"do": "imout"}},
+        {upsert: true},
+        function (err, result) {
+            if (err) throw err;
+            console.dir(2, result);
+        });
+
+    callbackDataCol.updateOne(
+        {"id": "remove"},
+        {"id": "remove", "data": {"do": "remove"}},
+        {upsert: true},
+        function (err, result) {
+            if (err) throw err;
+            console.dir(3, result);
+        });
+
+    // inlineKeyboardMarkup = [
+    //     [
+    //         {
+    //             text: _('imin'),
+    //             callback_data: new CallbackData().restore('imin').id
+    //         },
+    //         {
+    //             text: _('imout'),
+    //             callback_data: new CallbackData().restore('imout').id
+    //         }
+    //     ]//,
+    //     // [
+    //     //     {
+    //     //         text: _('remove'),
+    //     //         callback_data: new CallbackData().restore('remove').id
+    //     //     },
+    //     //     {
+    //     //         text: _('تماس با پشتیبانی'),
+    //     //         url: 'http://t.me/SSeyfi'
+    //     //     }
+    //     // ]
+    // ];
 };
 
 bot.onText(new RegExp(`^\/${config.commands.start}(@${config.bot.username}bot)?(\s+)?$`), (msg) => {
@@ -215,7 +245,7 @@ bot.on('callback_query', (q) => {
 dbUtil.connect(() => {
     init();
 
-    eventCol.find({}).toArray(function(err, docs) {
+    eventCol.find({}).toArray(function (err, docs) {
         if (err) {
             throw err;
         } else {

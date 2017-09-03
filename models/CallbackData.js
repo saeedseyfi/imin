@@ -7,7 +7,7 @@ let callbackDataCol;
 class CallbackData {
     constructor(options) {
         db = dbUtil.getDb();
-        callbackDataCol = db.collection(db.TABLE.CALLBACK_DATA);
+        callbackDataCol = db.collection(db.COL.CALLBACK_DATA);
 
         options = options || {};
         this.id = options.id || crypto.createHash('sha1').update((new Date()).valueOf().toString() + Math.random().toString()).digest('hex');
@@ -17,18 +17,42 @@ class CallbackData {
     }
 
     restore(id) {
-        const cdb = callbackDataCol.select({id: id}, 1)[0];
-
-        for (let key in cdb) {
-            if (cdb.hasOwnProperty(key)) {
-                this[key] = cdb[key];
+        db.collection(CONTACTS_COLLECTION).find({}).toArray(function(err, docs) {
+            if (err) {
+                handleError(res, err.message, "Failed to get contacts.");
+            } else {
+                res.status(200).json(docs);
             }
-        }
+        });
+        //
+        // const cdb = callbackDataCol.select({id: id}, 1)[0];
+        //
+        // for (let key in cdb) {
+        //     if (cdb.hasOwnProperty(key)) {
+        //         this[key] = cdb[key];
+        //     }
+        // }
 
         return this;
     }
 
     store() {
+        db.collection(db.COL.CALLBACK_DATA).find({}).toArray(function(err, docs) {
+            if (err) {
+                throw err;
+            } else {
+
+            }
+        });
+
+
+
+
+
+
+
+
+
         if (callbackDataCol.select({id: this.id}, 1).length) {
             callbackDataCol.update({id: this.id}, this);
         } else {
