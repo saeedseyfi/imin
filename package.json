@@ -22,8 +22,14 @@
     "url": "https://github.com/saeedseyfi/imin/issues"
   },
   "homepage": "https://github.com/saeedseyfi/imin#readme",
+  "engines": {
+    "node": "8.4.0"
+  },
   "dependencies": {
     "node-telegram-bot-api": "git+https://github.com/yagop/node-telegram-bot-api.git#master",
     "extend": "latest"
+  },
+  "devDependencies": {
+    "dotenv": "^4.0.0"
   }
 }

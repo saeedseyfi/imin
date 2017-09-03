@@ -5,6 +5,7 @@ const _ = require('./lib/lang');
 const config = require('./config');
 const Event = require('./models/Event');
 const CallbackData = require('./models/CallbackData');
+require('dotenv').config(); // to fill env vars locally
 
 const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
 const eventTable = db.table('event');
@@ -204,7 +205,7 @@ bot.on('callback_query', function (q) {
     }
 });
 
-http.createServer((req, res) => {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end();
-}).listen(9615); 
+// http.createServer((req, res) => {
+//     res.writeHead(200, {'Content-Type': 'text/plain'});
+//     res.end();
+// }).listen(9615); 
