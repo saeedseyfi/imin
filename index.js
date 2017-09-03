@@ -20,9 +20,13 @@ const init = () => {
     eventCol = db.collection(db.COL.EVENT);
     callbackDataCol = db.collection(db.COL.CALLBACK_DATA);
 
+    const iminCallbackData = new CallbackData({id: 'imin', data: {'do': 'imin'}});
+    const imoutCallbackData = new CallbackData({id: 'imout', data: {'do': 'imout'}});
+    const removeCallbackData = new CallbackData({id: 'remove', data: {'do': 'remove'}});
+
     callbackDataCol.updateOne(
-        {"id": "imin"},
-        {"id": "imin", "data": {"do": "imin"}},
+        {id: iminCallbackData.id},
+        iminCallbackData,
         {upsert: true},
         function (err, result) {
             if (err) throw err;
@@ -30,8 +34,8 @@ const init = () => {
         });
 
     callbackDataCol.updateOne(
-        {"id": "imout"},
-        {"id": "imout", "data": {"do": "imout"}},
+        {id: imoutCallbackData.id},
+        imoutCallbackData,
         {upsert: true},
         function (err, result) {
             if (err) throw err;
@@ -39,8 +43,8 @@ const init = () => {
         });
 
     callbackDataCol.updateOne(
-        {"id": "remove"},
-        {"id": "remove", "data": {"do": "remove"}},
+        {id: removeCallbackData.id},
+        removeCallbackData,
         {upsert: true},
         function (err, result) {
             if (err) throw err;
@@ -51,17 +55,17 @@ const init = () => {
         [
             {
                 text: _('imin'),
-                callback_data: new CallbackData().restore('imin').id
+                callback_data: iminCallbackData.id
             },
             {
                 text: _('imout'),
-                callback_data: new CallbackData().restore('imout').id
+                callback_data: imoutCallbackData.id
             }
         ]//,
         // [
         //     {
         //         text: _('remove'),
-        //         callback_data: new CallbackData().restore('remove').id
+        //         callback_data: removeCallbackData.id
         //     },
         //     {
         //         text: _('تماس با پشتیبانی'),
