@@ -179,7 +179,7 @@ bot.on('callback_query', function (q) {
 
 
     /* TODO: remove log stuff */
-    console.log(q.data);
+    console.log(data.do);
 
 
     switch (data.do) {
