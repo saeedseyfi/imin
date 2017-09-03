@@ -1,6 +1,6 @@
 const http = require('http');
 const TelegramBot = require('node-telegram-bot-api');
-const db = require('./lib/db');
+const dbUtil = require("./lib/dbUtil");
 const _ = require('./lib/lang');
 const config = require('./config');
 const Event = require('./models/Event');
@@ -8,7 +8,9 @@ const CallbackData = require('./models/CallbackData');
 require('dotenv').config(); // to fill env vars locally
 
 const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
-const eventTable = db.table('event');
+
+let db;
+let eventCol;
 
 const inlineKeyboardMarkup = [
     [
@@ -35,11 +37,6 @@ const inlineKeyboardMarkup = [
 
 bot.onText(new RegExp(`^\/${config.commands.start}(@${config.bot.username}bot)?(\s+)?$`), (msg) => {
     bot.sendMessage(msg.chat.id, `${_('desc')}\n\n${_('howToUse')}`);
-
-
-    /* TODO: remove log stuff */
-    console.log(eventTable.select());
-    
 });
 
 bot.onText(new RegExp(`^\/${config.commands.add}(@${config.bot.username}bot)?(\s+)?$`), (msg) => {
@@ -56,12 +53,12 @@ bot.onText(new RegExp(`^\/${config.commands.add}(@${config.bot.username}bot)?(\s
         }
     }).done(function (message) {
         event.messageId = message.message_id;
-        eventTable.insert(event);
+        eventCol.insert(event);
     });
 });
 
-bot.on('callback_query', function (q) {
-    const event = eventTable.select({messageId: q.message.message_id})[0];
+bot.on('callback_query', (q) => {
+    const event = eventCol.select({messageId: q.message.message_id})[0];
     const oldEvent = JSON.stringify(event);
 
     let data = new CallbackData().restore(q.data).data;
@@ -129,7 +126,7 @@ bot.on('callback_query', function (q) {
             }
         });
 
-        eventTable.update({id: event.id}, event);
+        eventCol.update({id: event.id}, event);
     }
 
     function doRemoveConfirm() {
@@ -210,7 +207,21 @@ bot.on('callback_query', function (q) {
     }
 });
 
-http.createServer((req, res) => {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end();
-}).listen(process.env.PORT || 5000);
+dbUtil.connect(() => {
+    db = dbUtil.getDb();
+    eventCol = db.collection(db.TABLE.EVENT);
+
+    eventCol.find({}).toArray(function(err, docs) {
+        if (err) {
+            throw err;
+        } else {
+            /* TODO: remove log stuff */
+            console.log(docs);
+        }
+    });
+
+    http.createServer((req, res) => {
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end();
+    }).listen(process.env.PORT || 5000);
+});

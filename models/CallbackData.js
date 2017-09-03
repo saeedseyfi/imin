@@ -1,9 +1,14 @@
 const crypto = require('crypto');
-const db = require('../lib/db');
-const callbackDataTable = db.table('callbackData');
+const dbUtil = require("../lib/dbUtil");
+
+let db;
+let callbackDataCol;
 
 class CallbackData {
     constructor(options) {
+        db = dbUtil.getDb();
+        callbackDataCol = db.collection(db.TABLE.CALLBACK_DATA);
+
         options = options || {};
         this.id = options.id || crypto.createHash('sha1').update((new Date()).valueOf().toString() + Math.random().toString()).digest('hex');
         this.data = options.data || {};
@@ -12,7 +17,7 @@ class CallbackData {
     }
 
     restore(id) {
-        const cdb = callbackDataTable.select({id: id}, 1)[0];
+        const cdb = callbackDataCol.select({id: id}, 1)[0];
 
         for (let key in cdb) {
             if (cdb.hasOwnProperty(key)) {
@@ -24,18 +29,18 @@ class CallbackData {
     }
 
     store() {
-        if (callbackDataTable.select({id: this.id}, 1).length) {
-            callbackDataTable.update({id: this.id}, this);
+        if (callbackDataCol.select({id: this.id}, 1).length) {
+            callbackDataCol.update({id: this.id}, this);
         } else {
-            callbackDataTable.insert(this);
+            callbackDataCol.insert(this);
         }
 
         return this;
     }
 
     drop() {
-        if (callbackDataTable.select({id: this.id}).length) {
-            callbackDataTable.drop({id: this.id}, 1);
+        if (callbackDataCol.select({id: this.id}).length) {
+            callbackDataCol.drop({id: this.id}, 1);
         }
 
         return this;

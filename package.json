@@ -26,8 +26,8 @@
     "node": "8.4.0"
   },
   "dependencies": {
-    "node-telegram-bot-api": "git+https://github.com/yagop/node-telegram-bot-api.git#master",
     "dotenv": "^4.0.0",
-    "extend": "latest"
+    "mongodb": "^2.2.31",
+    "node-telegram-bot-api": "git+https://github.com/yagop/node-telegram-bot-api.git#master"
   }
 }
