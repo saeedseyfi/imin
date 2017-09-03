@@ -245,7 +245,7 @@ bot.on('callback_query', (q) => {
 dbUtil.connect(() => {
     init();
 
-    eventCol.find({}).toArray(function (err, docs) {
+    callbackDataCol.find({}).toArray(function (err, docs) {
         if (err) {
             throw err;
         } else {
