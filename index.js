@@ -3,11 +3,10 @@ const TelegramBot = require('node-telegram-bot-api');
 const db = require('./lib/db');
 const _ = require('./lib/lang');
 const config = require('./config');
-const token = require('./token');
 const Event = require('./models/Event');
 const CallbackData = require('./models/CallbackData');
 
-const bot = new TelegramBot(token, {polling: true});
+const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
 const eventTable = db.table('event');
 
 const inlineKeyboardMarkup = [

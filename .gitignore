@@ -1,5 +1,4 @@
 .idea
 node_modules
-token.js
 *.log
 db/**
