@@ -15,7 +15,7 @@ let eventCol;
 let inlineKeyboardMarkup;
 let callbackDataCol;
 
-const init = () => {
+function init() {
     db = dbUtil.getDb();
     eventCol = db.collection(db.COL.EVENT);
     callbackDataCol = db.collection(db.COL.CALLBACK_DATA);
@@ -28,7 +28,7 @@ const init = () => {
         {id: iminCallbackData.id},
         iminCallbackData,
         {upsert: true},
-        function (err, result) {
+        (err, result) => {
             if (err) throw err;
             console.dir(1, result);
         });
@@ -37,7 +37,7 @@ const init = () => {
         {id: imoutCallbackData.id},
         imoutCallbackData,
         {upsert: true},
-        function (err, result) {
+        (err, result) => {
             if (err) throw err;
             console.dir(2, result);
         });
@@ -46,7 +46,7 @@ const init = () => {
         {id: removeCallbackData.id},
         removeCallbackData,
         {upsert: true},
-        function (err, result) {
+        (err, result) => {
             if (err) throw err;
             console.dir(3, result);
         });
@@ -91,7 +91,7 @@ bot.onText(new RegExp(`^\/${config.commands.add}(@${config.bot.username}bot)?(\s
         reply_markup: {
             inline_keyboard: inlineKeyboardMarkup
         }
-    }).done(function (message) {
+    }).done((message) => {
         event.messageId = message.message_id;
         eventCol.insert(event);
     });
@@ -104,27 +104,22 @@ bot.on('callback_query', (q) => {
     let data = new CallbackData().restore(q.data).data;
 
     function getUserIndexInAttendees(where) {
-        for (let i = 0; i < where.length; i++) {
-            if (where[i].id === q.from.id) {
+        for (let i = 0; i < where.length; i++)
+            if (where[i].id === q.from.id)
                 return i;
-            }
-        }
 
         return -1;
     }
 
     function doInOut(firstArr, firstIndex, secondArr, secondIndex) {
-        if (firstIndex === -1) {
+        if (firstIndex === -1)
             firstArr.push(q.from);
-        }
 
-        if (secondIndex > -1) {
+        if (secondIndex > -1)
             secondArr.splice(secondIndex, 1);
-        }
 
-        if (oldEvent === JSON.stringify(event)) {
+        if (oldEvent === JSON.stringify(event))
             return; // No change
-        }
 
         function getNames(arr) {
             let names = [];
@@ -146,7 +141,7 @@ bot.on('callback_query', (q) => {
             message += ` (${event.willAttend.length})\n`;
             message += getNames(event.willAttend).join('\n');
         } else {
-            message += ' ' + _('no_one')
+            message += ' ' + _('no_one');
         }
 
         message += '\n\n';
@@ -192,8 +187,8 @@ bot.on('callback_query', (q) => {
                         ]
                     ]
                 }
-            }).done(function (message) {
-                setTimeout(function () {
+            }).done((message) => {
+                setTimeout(() => {
                     bot.deleteMessage(q.message.chat.id, message.message_id);
                     removeYesCBD.drop();
                     removeNoCBD.drop();
@@ -204,8 +199,8 @@ bot.on('callback_query', (q) => {
                 reply_to_message_id: q.message.message_id,
                 disable_notification: true,
                 parse_mode: 'HTML'
-            }).done(function (message) {
-                setTimeout(function () {
+            }).done((message) => {
+                setTimeout(() => {
                     bot.deleteMessage(q.message.chat.id, message.message_id);
                 }, 10000);
             });
@@ -255,5 +250,5 @@ dbUtil.connect(() => {
         res.end();
     }).listen(process.env.PORT || 5000);
 
-    setInterval(() => request(`https://iminbot.herokuapp.com/`), 1740000); // Prevent Heroku from stopping after 30 min
+    setInterval(() => request(`https://iminbot.herokuapp.com/`), 1740000); // Prevent Heroku to stop the app after 30 mins
 });
