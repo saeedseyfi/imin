@@ -255,12 +255,5 @@ dbUtil.connect(() => {
         res.end();
     }).listen(process.env.PORT || 5000);
 
-    setInterval(() => {
-        request(`https://iminbot.herokuapp.com/`, function () {
-
-            /* TODO: remove log stuff */
-            console.log(arguments);
-
-        })
-    }, 10000)
+    setInterval(() => request(`https://iminbot.herokuapp.com/`), 1740000); // Prevent Heroku from stopping after 30 min
 });
