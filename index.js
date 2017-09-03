@@ -28,27 +28,24 @@ function init() {
         {id: iminCallbackData.id},
         iminCallbackData,
         {upsert: true},
-        (err, result) => {
+        (err) => {
             if (err) throw err;
-            console.dir(1, result);
         });
 
     callbackDataCol.updateOne(
         {id: imoutCallbackData.id},
         imoutCallbackData,
         {upsert: true},
-        (err, result) => {
+        (err) => {
             if (err) throw err;
-            console.dir(2, result);
         });
 
     callbackDataCol.updateOne(
         {id: removeCallbackData.id},
         removeCallbackData,
         {upsert: true},
-        (err, result) => {
+        (err) => {
             if (err) throw err;
-            console.dir(3, result);
         });
 
     inlineKeyboardMarkup = [
